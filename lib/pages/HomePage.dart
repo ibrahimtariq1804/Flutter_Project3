@@ -9,7 +9,6 @@ class Homepage extends StatefulWidget{
 class _HomePageState extends State<Homepage>{
    String selectedCategory = 'ASIAN';
 
-  // Food items categorized
   final Map<String, List<Map<String, String>>> foodItems = {
     'ASIAN': [
       {'name': 'Biryani', 'price': '300 Rs/-', 'image': 'assets/images/biryani.jpg'},
@@ -17,7 +16,7 @@ class _HomePageState extends State<Homepage>{
       {'name': 'Pulao', 'price': '250 Rs/-', 'image': 'assets/images/pulao.jpg'},
     ],
     'CHINESE': [
-      {'name': 'Noodles', 'price': '400 Rs/-', 'image': 'assets/images/momos.jpg'},
+      {'name': 'Momos', 'price': '400 Rs/-', 'image': 'assets/images/momos.jpg'},
       {'name': 'Egg Fried Rice', 'price': '350 Rs/-', 'image': 'assets/images/chineserice.jpg'},
       {'name': 'Chicken Manchurian', 'price': '350 Rs/-', 'image': 'assets/images/manchurian.jpg'},
     ],
@@ -35,6 +34,8 @@ class _HomePageState extends State<Homepage>{
     ],
   };
 
+  final Map<String, Map<String, String>> likedItems = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,20 @@ class _HomePageState extends State<Homepage>{
             onPressed: (){
                Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=> Shoppingcart()),
+                      MaterialPageRoute(builder: (context)=> shoppingcart(
+          likedItems: likedItems.entries
+              .map((entry) {
+                // Check if the item is liked, and retrieve its details
+                final item = foodItems[selectedCategory]!
+                    .firstWhere((element) => element['name'] == entry.key);
+                return {
+                  'name': item['name']!,
+                  'price': item['price']!,
+                  'image': item['image']!,
+                };
+              }).toList(),
+                      ),
+                      ),
                );
             },
              icon: Icon(Icons.food_bank_rounded, size: 35, color: const Color.fromARGB(255, 23, 20, 20),),
@@ -134,6 +148,7 @@ class _HomePageState extends State<Homepage>{
 
   Widget makeItem ({required String images,required  String price,required  String name})
   {
+    bool isLiked = likedItems.containsKey(name);
     return AspectRatio(
       aspectRatio:1/1.5,
       child: GestureDetector(
@@ -166,7 +181,22 @@ class _HomePageState extends State<Homepage>{
                 children: <Widget>[
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: Icon(Icons.favorite_rounded, color: Colors.white,),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                           if (isLiked) {
+                            likedItems.remove(name); 
+                          } 
+                          else {
+                            likedItems[name] = {'name': name, 'price': price, 'image': images}; 
+                          }
+                                                });
+                      },
+                      child: Icon(
+                        isLiked ? Icons.favorite : Icons.favorite_border,
+                        color: isLiked ? Colors.red : Colors.white,
+                      ),
+                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
