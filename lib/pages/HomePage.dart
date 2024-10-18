@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project3/pages/shoppingcart.dart';
 
 class Homepage extends StatefulWidget{
   @override
@@ -6,15 +7,52 @@ class Homepage extends StatefulWidget{
 }
 
 class _HomePageState extends State<Homepage>{
+   String selectedCategory = 'ASIAN';
+
+  // Food items categorized
+  final Map<String, List<Map<String, String>>> foodItems = {
+    'ASIAN': [
+      {'name': 'Biryani', 'price': '300 Rs/-', 'image': 'assets/images/biryani.jpg'},
+      {'name': 'Karahi', 'price': '1000 Rs/-', 'image': 'assets/images/karahi.jpg'},
+      {'name': 'Pulao', 'price': '250 Rs/-', 'image': 'assets/images/pulao.jpg'},
+    ],
+    'CHINESE': [
+      {'name': 'Noodles', 'price': '400 Rs/-', 'image': 'assets/images/momos.jpg'},
+      {'name': 'Egg Fried Rice', 'price': '350 Rs/-', 'image': 'assets/images/chineserice.jpg'},
+      {'name': 'Chicken Manchurian', 'price': '350 Rs/-', 'image': 'assets/images/manchurian.jpg'},
+    ],
+    'DESSERTS': [
+      {'name': 'Gulab Jamun', 'price': '150 Rs/-', 'image': 'assets/images/gulabjamun.jpg'},
+      {'name': 'Cinnamon Roll', 'price': '200 Rs/-', 'image': 'assets/images/cinnamonrolls.jpg'},
+      {'name': 'Cheese Cake', 'price': '200 Rs/-', 'image': 'assets/images/cheesecake.jpg'},
+
+    ],
+    'SMOOTHIES': [
+      {'name': 'Mango Smoothie', 'price': '180 Rs/-', 'image': 'assets/images/milkshake.jpg'},
+      {'name': 'Mint Margarita', 'price': '200 Rs/-', 'image': 'assets/images/mintmargarita.jpg'},
+      {'name': 'Pina Colada', 'price': '200 Rs/-', 'image': 'assets/images/pinacolada.jpg'},
+
+    ],
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 113, 41, 41),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 60.0),
+          child: Text('Food Items', style: TextStyle(fontStyle: FontStyle.italic,fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),),
+        ),
         leading: Icon(null),
         actions: <Widget>[
           IconButton(
-            onPressed: (){},
+            onPressed: (){
+               Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=> Shoppingcart()),
+               );
+            },
              icon: Icon(Icons.food_bank_rounded, size: 35, color: const Color.fromARGB(255, 23, 20, 20),),
              )
         ],
@@ -26,38 +64,39 @@ class _HomePageState extends State<Homepage>{
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 children: <Widget>[
-                  Text('Food Items', style: TextStyle(fontStyle: FontStyle.italic,fontSize: 35, fontWeight: FontWeight.bold, color: Colors.black),),
                   SizedBox(
                     height: 15,
                   ), 
                   Container(
-                    height: 45,
+                    height: 50,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        makecategory(isactive: true, title:'ASIAN' ),
-                        makecategory(isactive: false, title:'CHINESE' ),
-                        makecategory(isactive: false, title:'DESSERTS' ),
-                        makecategory(isactive: false, title:'SMOOTHIES' ),
+                        makecategory(isactive: selectedCategory == 'ASIAN', title: 'ASIAN'),
+                        makecategory(isactive: selectedCategory == 'CHINESE', title: 'CHINESE'),
+                        makecategory(isactive: selectedCategory == 'DESSERTS', title: 'DESSERTS'),
+                        makecategory(isactive: selectedCategory == 'SMOOTHIES', title: 'SMOOTHIES'),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 30,
                     ),
                 ],
               )
               ),
                Expanded(
                  child : Padding(
-                      padding:EdgeInsets.symmetric(horizontal: 20.0),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          makeItem(images: 'assets/images/biryani.jpg',price: '300 Rs/-',name: 'Biryani'),
-                          makeItem(images: 'assets/images/karahi.jpg', price: '1000 Rs/-',name: 'Karahi'),
-                          makeItem(images: 'assets/images/pulao.jpg', price: '850 Rs/-',name: 'Pulao'),
-                        ],
+                    padding:EdgeInsets.symmetric(horizontal: 20.0),
+                    child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: foodItems[selectedCategory]!.map((item) {
+                        return makeItem(
+                                 images: item['image']!,
+                                 price: item['price']!,
+                                 name: item['name']!,
+                          );
+                        }).toList(),
                       ),
                       )
                ),
@@ -71,7 +110,13 @@ class _HomePageState extends State<Homepage>{
 
   Widget makecategory ({required isactive,required title})
   {
-    return AspectRatio(
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedCategory = title;
+        });
+      },
+    child: AspectRatio(
       aspectRatio: isactive? 3:2.0,
       child: Container(
         margin: EdgeInsets.only(right: 10),
@@ -83,7 +128,8 @@ class _HomePageState extends State<Homepage>{
           child: Text(title, style:  TextStyle(fontSize: 13,fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: isactive? Colors.white:Colors.black),),
           ),
       ),
-      );
+    ),
+    );
   }
 
   Widget makeItem ({required String images,required  String price,required  String name})
@@ -125,11 +171,11 @@ class _HomePageState extends State<Homepage>{
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(price, style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
+                      Text(price, style: TextStyle(fontStyle: FontStyle.italic ,fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),),
                       SizedBox(
                         height: 5,
                       ),
-                      Text(name, style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
+                      Text(name, style: TextStyle(fontStyle: FontStyle.italic ,fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
                     ],
                   )
                 ],

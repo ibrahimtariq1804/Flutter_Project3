@@ -35,13 +35,13 @@ class _StarterPageState extends State<Starterpage> with TickerProviderStateMixin
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text('Taking Orders For Delivery',style: TextStyle(color: const Color.fromARGB(255, 216, 208, 208),fontSize: 40, fontWeight: FontWeight.bold)),
+                Text('Taking Orders For Delivery',style: TextStyle(fontStyle: FontStyle.italic,color: const Color.fromARGB(255, 216, 208, 208),fontSize: 40, fontWeight: FontWeight.bold)),
 
                 SizedBox(
                   height: 20,
                 ),
 
-                Text('Favourite Places Nearby',style: TextStyle(color: const Color.fromARGB(255, 201, 194, 194),fontSize: 20,)),
+                Text('Favourite Places Nearby',style: TextStyle(fontStyle: FontStyle.italic,color: const Color.fromARGB(255, 201, 194, 194),fontSize: 20,)),
                  
                  SizedBox(
                   height: 30,
@@ -66,14 +66,14 @@ class _StarterPageState extends State<Starterpage> with TickerProviderStateMixin
                   );
                   },
                     minWidth: double.infinity,
-                    child: Text('GET STARTED', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 201, 194, 194))),
+                    child: Text('GET STARTED', style: TextStyle(fontStyle: FontStyle.italic ,fontSize: 15, color: const Color.fromARGB(255, 201, 194, 194))),
                   ),
                 ),
                   SizedBox(
                     height: 15,
                     ),
                     Align(
-                      child: Text('Available 24/7 For you',style: TextStyle(color: const Color.fromARGB(255, 201, 194, 194),fontSize: 15),)
+                      child: Text('Available 24/7 For you',style: TextStyle(fontStyle: FontStyle.italic,color: const Color.fromARGB(255, 201, 194, 194),fontSize: 15),)
                     ),
 
                     SizedBox(
